@@ -1,7 +1,7 @@
 public class Note
 {
     private char base12;
-    char flat_sharp_na;
+    private char flat_sharp_na;
     public Note(char base12, char flat_sharp_na)
     {
         //DO NOT modify base12 after initializing it in the constructor

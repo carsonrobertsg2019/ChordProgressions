@@ -9,16 +9,23 @@ public class Scale
     private void startup()
     {
         System.out.println("Now define at least 3 notes in the scale by inputting values from these choices: \n" +
-                "0 1 2 3 4 5 6 7 8 9 T E \n" +
+                "1 2 3 4 5 6 7 8 9 T E \n" +
                 "Upon entering at least 3 notes, you may choose to enter Q instead of the above choices to stop. \n" +
                 "This program operates under the 12TET system, so once you have made 12 choices, the program will end automatically.");
     }
 
-    private void invalid_input()
+    private void invalid_input(boolean tonic)
     {
-        System.out.println("Sorry, but you need to enter a valid choice. Valid choices are defined as: \n" +
-                "0 1 2 3 4 5 6 7 8 9 T E \n" +
-                "Please try again, or you may enter Q to quit, assuming you have already entered 3 notes.");
+        if(tonic)
+        {
+            System.out.println("Sorry, but you need to enter a valid choice. Valid choices are defined as: \n" +
+                    "0 1 2 3 4 5 6 7 8 9 T E");
+        }
+        else
+        {
+            System.out.println("Sorry, but you need to enter a valid choice. Valid choices are defined as: \n" +
+                    "1 2 3 4 5 6 7 8 9 T E");
+        }
     }
 
     private void non_unique_input()
@@ -60,7 +67,7 @@ public class Scale
 
     private void inputTonic()
     {
-        System.out.println("First, define the note that the scale starts on. Your choices are: \n " +
+        System.out.println("First, define the note that the scale starts on. Your choices are: \n" +
                 "0  1  2  3  4  5  6  7  8  9  T  E\n" +
                 "The notes that correspond to those characters are as follows: \n" +
                 "C  Db D  Eb E  F  Gb G  Ab A  Bb B\n" +
@@ -75,65 +82,111 @@ public class Scale
 
     private boolean isAccidental(char input)
     {
-        /*
-        TODO: FIX THIS IT'S BAD IT DOESN'T WORK FIX IT
-        THE COMMENTED CODE AFTER IT IS WORSE
-         */
-        return input == '1' || input == '3' || input == '6' || input == '8' || input == 'T';
-        /*
-        if(input == 'T') {
-            int x = tonic.convertToBase10() + 10;
-            if (x < 11) {
-                return false;
-            } else {
-                x -= 12;
-                return x == 1 ||
-                        x == 3 ||
-                        x == 6 ||
-                        x == 8 ||
-                        x == 10;
-            }
+        //TODO: this is pretty bad still but it works at least lol
+        if(tonic.getBase12Val() == '0')
+        {
+            return input == '1' ||
+                    input == '3' ||
+                    input == '6' ||
+                    input == '8' ||
+                    input == 'T';
         }
-        else if(input == 'E') {
-            int x = tonic.convertToBase10() + 11;
-            if (x < 11) {
-                return false;
-            } else {
-                x -= 12;
-                return x == 1 ||
-                        x == 3 ||
-                        x == 6 ||
-                        x == 8 ||
-                        x == 10;
-            }
+        else if(tonic.getBase12Val() == '1')
+        {
+            return input == '2' ||
+                    input == '5' ||
+                    input == '7' ||
+                    input == '9';
         }
-        else if(input - 48 < 9) {
-            int x = tonic.convertToBase10() + input - 48;
-            if (x < 11) {
-                return false;
-            } else {
-                x -= 12;
-                return x == 1 ||
-                        x == 3 ||
-                        x == 6 ||
-                        x == 8 ||
-                        x == 10;
-            }
+        else if(tonic.getBase12Val() == '2')
+        {
+            return input == '1' ||
+                    input == '4' ||
+                    input == '6' ||
+                    input == '8' ||
+                    input == 'E';
+        }
+        else if(tonic.getBase12Val() == '3')
+        {
+            return input == '3' ||
+                    input == '5' ||
+                    input == '7' ||
+                    input == 'T';
+        }
+        else if(tonic.getBase12Val() == '4')
+        {
+            return input == '2' ||
+                    input == '4' ||
+                    input == '6' ||
+                    input == '9' ||
+                    input == 'E';
+        }
+        else if(tonic.getBase12Val() == '5')
+        {
+            return input == '1' ||
+                    input == '3' ||
+                    input == '5' ||
+                    input == '8' ||
+                    input == 'T';
+        }
+        else if(tonic.getBase12Val() == '6')
+        {
+            return input == '2' ||
+                    input == '4' ||
+                    input == '7' ||
+                    input == '9';
+        }
+        else if(tonic.getBase12Val() == '7')
+        {
+            return input == '1' ||
+                    input == '3' ||
+                    input == '6' ||
+                    input == '8' ||
+                    input == 'E';
+        }
+        else if(tonic.getBase12Val() == '8')
+        {
+            return input == '2' ||
+                    input == '5' ||
+                    input == '7' ||
+                    input == 'T';
+        }
+        else if(tonic.getBase12Val() == '9')
+        {
+            return input == '1' ||
+                    input == '4' ||
+                    input == '6' ||
+                    input == '9' ||
+                    input == 'E';
+        }
+        else if(tonic.getBase12Val() == 'T')
+        {
+            return input == '3' ||
+                    input == '5' ||
+                    input == '8' ||
+                    input == 'T';
+        }
+        else if(tonic.getBase12Val() == 'E')
+        {
+            return input == '2' ||
+                    input == '4' ||
+                    input == '7' ||
+                    input == '9' ||
+                    input == 'E';
         }
         return false;
-         */
     }
 
     private void invalidAccidental()
     {
         System.out.println("Invalid accidental. Try again.");
     }
-    private void writeToConsole(int messageType, int i)
+    private void writeToConsole(int messageType, int i, boolean tonic)
     {
         if(messageType == 0)
             startup();
         else if(messageType == 1)
-            invalid_input();
+            invalid_input(tonic);
         else if(messageType == 2)
             non_unique_input();
         else if(messageType == 3)
@@ -150,19 +203,25 @@ public class Scale
     {
         Scanner sc = new Scanner(System.in);  // Create a Scanner object
 
-        writeToConsole(4, -1);
+        writeToConsole(4, -1, false);
         char tonic_char = sc.next().charAt(0);
+        while(!valid_input(tonic_char))
+        {
+            writeToConsole(1,-1, true);
+            tonic_char = sc.next().charAt(0);
+        }
         char flat_sharp_na = '\u0000';
         if(isAccidental(tonic_char)) {
-            writeToConsole(5, -1);
+            writeToConsole(5, -1, false);
             flat_sharp_na = sc.next().charAt(0);
         }
 
         tonic = new Note(tonic_char, flat_sharp_na);
-        writeToConsole(0, -1);
+        writeToConsole(0, -1, false);
         notesInScale = new Note[12];
         char currIn;
-        for(int i = 0; i < notesInScale.length; i++)
+        notesInScale[0] = new Note('0', tonic.getFlat_sharp_na());
+        for(int i = 1; i < notesInScale.length; i++)
         {
             currIn = sc.next().charAt(0);
             if(valid_input(currIn))
@@ -171,11 +230,11 @@ public class Scale
                 {
                     flat_sharp_na = '\u0000';
                     if(isAccidental(currIn)) {
-                        writeToConsole(5, -1);
+                        writeToConsole(5, -1, false);
                         flat_sharp_na = sc.next().charAt(0);
                         while(flat_sharp_na != '#' && flat_sharp_na != 'b')
                         {
-                            writeToConsole(6,-1);
+                            writeToConsole(6,-1, false);
                             flat_sharp_na = sc.next().charAt(0);
                         }
                     }
@@ -184,7 +243,7 @@ public class Scale
                 }
                 else
                 {
-                    writeToConsole(2, -1);
+                    writeToConsole(2, -1, false);
                     i--;
                 }
             }
@@ -196,13 +255,13 @@ public class Scale
                 }
                 else
                 {
-                    writeToConsole(3, i);
+                    writeToConsole(3, i, false);
                     i--;
                 }
             }
             else
             {
-                writeToConsole(1, -1);
+                writeToConsole(1, -1, false);
                 i--;
             }
         }

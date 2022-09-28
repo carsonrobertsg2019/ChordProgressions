@@ -21,7 +21,7 @@ public class Driver
         for(int i = 0; i < scale.getNotesInScale().length && scale.getNotesInScale()[i] != null; i++)
         {
             int j = 0;
-            if(scale.getNotesInScale()[i].flat_sharp_na == '#')
+            if(scale.getNotesInScale()[i].getFlat_sharp_na() == '#')
             {
                 j = 1;
             }
