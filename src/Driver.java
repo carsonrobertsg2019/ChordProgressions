@@ -36,6 +36,6 @@ public class Driver
         }
         System.out.println();
         Chord chord = new Chord(scale);
-        chord.setListOfNotesInChord();
+        chord.setNotesInChord();
     }
 }

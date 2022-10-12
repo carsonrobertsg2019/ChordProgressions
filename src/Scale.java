@@ -177,77 +177,53 @@ public class Scale
         return false;
     }
 
+    char defineTonic(char currIn, Scanner sc)
+    {
+        while(!valid_input(currIn))
+        {
+            boolean isTonic = true;
+            invalid_input(isTonic);
+            currIn = sc.next().charAt(0);
+        }
+        return currIn;
+    }
+    char sharpOrFlat(char currIn, Scanner sc)
+    {
+        char flat_sharp_na = '\u0000';
+        if(isAccidental(currIn))
+        {
+            inputSharpFlatNa();
+            flat_sharp_na = sc.next().charAt(0);
+            while(flat_sharp_na != '#' && flat_sharp_na != 'b')
+            {
+                invalidAccidental();
+                flat_sharp_na = sc.next().charAt(0);
+            }
+        }
+        return flat_sharp_na;
+    }
+
     private void invalidAccidental()
     {
         System.out.println("Invalid accidental. Try again.");
-    }
-    private void writeToConsole(int messageType, int i, boolean tonic)
-    {
-        if(messageType == 0)
-            startup();
-        else if(messageType == 1)
-            invalid_input(tonic);
-        else if(messageType == 2)
-            non_unique_input();
-        else if(messageType == 3)
-            quit_too_early(i);
-        else if(messageType == 4)
-            inputTonic();
-        else if(messageType == 5)
-            inputSharpFlatNa();
-        else if(messageType == 6)
-            invalidAccidental();
     }
 
     public void setNotesInScale()
     {
         Scanner sc = new Scanner(System.in);  // Create a Scanner object
 
-        writeToConsole(4, -1, false);
-        char tonic_char = sc.next().charAt(0);
-        while(!valid_input(tonic_char))
-        {
-            writeToConsole(1,-1, true);
-            tonic_char = sc.next().charAt(0);
-        }
-        char flat_sharp_na = '\u0000';
-        if(isAccidental(tonic_char)) {
-            writeToConsole(5, -1, false);
-            flat_sharp_na = sc.next().charAt(0);
-        }
+        inputTonic();
+        char currIn = defineTonic(sc.next().charAt(0), sc);
+        char flat_sharp_na = sharpOrFlat(currIn, sc);
 
-        tonic = new Note(tonic_char, flat_sharp_na);
-        writeToConsole(0, -1, false);
+        tonic = new Note(currIn, flat_sharp_na);
+        startup();
         notesInScale = new Note[12];
-        char currIn;
         notesInScale[0] = new Note('0', tonic.getFlat_sharp_na());
         for(int i = 1; i < notesInScale.length; i++)
         {
             currIn = sc.next().charAt(0);
-            if(valid_input(currIn))
-            {
-                if(unique_input(currIn, notesInScale))
-                {
-                    flat_sharp_na = '\u0000';
-                    if(isAccidental(currIn)) {
-                        writeToConsole(5, -1, false);
-                        flat_sharp_na = sc.next().charAt(0);
-                        while(flat_sharp_na != '#' && flat_sharp_na != 'b')
-                        {
-                            writeToConsole(6,-1, false);
-                            flat_sharp_na = sc.next().charAt(0);
-                        }
-                    }
-                    Note newNote = new Note(currIn, flat_sharp_na);
-                    notesInScale[i] = newNote;
-                }
-                else
-                {
-                    writeToConsole(2, -1, false);
-                    i--;
-                }
-            }
-            else if(currIn == 'Q')
+            if(currIn == 'Q')
             {
                 if(i > 2)
                 {
@@ -255,14 +231,26 @@ public class Scale
                 }
                 else
                 {
-                    writeToConsole(3, i, false);
+                    quit_too_early(i);
                     i--;
                 }
             }
+            else if(!valid_input(currIn))
+            {
+                boolean isTonic= false;
+                invalid_input(isTonic);
+                i--;
+            }
+            else if(!unique_input(currIn, notesInScale))
+            {
+                non_unique_input();
+                i--;
+            }
             else
             {
-                writeToConsole(1, -1, false);
-                i--;
+                flat_sharp_na = sharpOrFlat(currIn, sc);
+                Note newNote = new Note(currIn, flat_sharp_na);
+                notesInScale[i] = newNote;
             }
         }
     }
