@@ -2,6 +2,7 @@ public class Driver
 {
     public static void main(String[] args)
     {
+        //TODO: convert arrays in Scale and Chord to arraylists
         String[][] index = {
                 {"C"},
                 {"Db", "C#"},
@@ -18,23 +19,6 @@ public class Driver
         };
         Scale scale = new Scale();
         scale.setNotesInScale();
-        for(int i = 0; i < scale.getNotesInScale().length && scale.getNotesInScale()[i] != null; i++)
-        {
-            int j = 0;
-            if(scale.getNotesInScale()[i].getFlat_sharp_na() == '#')
-            {
-                j = 1;
-            }
-            try
-            {
-                System.out.print(index[scale.getNotesInScale()[i].convertToBase10() + scale.getTonic().convertToBase10()][j] + " ");
-            }
-            catch(IndexOutOfBoundsException ioobe)
-            {
-                System.out.print(index[scale.getNotesInScale()[i].convertToBase10() + scale.getTonic().convertToBase10() - 12][j] + " ");
-            }
-        }
-        System.out.println();
         Chord chord = new Chord(scale);
         chord.setNotesInChord();
     }

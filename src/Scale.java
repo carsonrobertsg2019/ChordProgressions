@@ -3,8 +3,12 @@ import java.util.Scanner;
 public class Scale
 {
     private Note[] notesInScale;
-    private Note tonic = new Note('0','\u0000');
-    public Scale() { }
+    private Note tonic;
+    public Scale()
+    {
+        notesInScale = new Note[12];
+        tonic = new Note('0','\u0000');
+    }
 
     private void startup()
     {
@@ -52,12 +56,12 @@ public class Scale
         return java.lang.Character.getNumericValue(currIn) <= 9 || currIn == 'T' || currIn == 'E';
     }
 
-    private boolean unique_input(char currIn, Note[] listOfNotes)
+    private boolean unique_input(char currIn)
     {
         boolean unique = true;
-        for(int j = 0; listOfNotes[j] != null; j++)
+        for(int j = 0; notesInScale[j] != null; j++)
         {
-            if(listOfNotes[j].getBase12Val() == currIn)
+            if(notesInScale[j].getBase12Val() == currIn)
             {
                 unique = false;
             }
@@ -82,7 +86,7 @@ public class Scale
 
     private boolean isAccidental(char input)
     {
-        //TODO: this is pretty bad still but it works at least lol
+        //TODO: this is pretty bad still but it works at least lol... too bad!
         if(tonic.getBase12Val() == '0')
         {
             return input == '1' ||
@@ -187,7 +191,8 @@ public class Scale
         }
         return currIn;
     }
-    char sharpOrFlat(char currIn, Scanner sc)
+
+    private char sharpOrFlat(char currIn, Scanner sc)
     {
         char flat_sharp_na = '\u0000';
         if(isAccidental(currIn))
@@ -201,6 +206,32 @@ public class Scale
             }
         }
         return flat_sharp_na;
+    }
+
+    private Note[] sort(Note[] arr)
+    {
+        try
+        {
+            int n = arr.length;
+            for (int i = 1; i < n; ++i) {
+                Note key = arr[i];
+                int j = i - 1;
+
+            /* Move elements of arr[0..i-1], that are
+               greater than key, to one position ahead
+               of their current position */
+                while (j >= 0 && arr[j].convertToBase10() > key.convertToBase10())
+                {
+                    arr[j + 1] = arr[j];
+                    j = j - 1;
+                }
+                arr[j + 1] = key;
+            }
+            return arr;
+        }
+        catch(Exception NullPointerException) {
+            return arr;
+        }
     }
 
     private void invalidAccidental()
@@ -218,7 +249,6 @@ public class Scale
 
         tonic = new Note(currIn, flat_sharp_na);
         startup();
-        notesInScale = new Note[12];
         notesInScale[0] = new Note('0', tonic.getFlat_sharp_na());
         for(int i = 1; i < notesInScale.length; i++)
         {
@@ -241,7 +271,7 @@ public class Scale
                 invalid_input(isTonic);
                 i--;
             }
-            else if(!unique_input(currIn, notesInScale))
+            else if(!unique_input(currIn))
             {
                 non_unique_input();
                 i--;
@@ -253,6 +283,7 @@ public class Scale
                 notesInScale[i] = newNote;
             }
         }
+        notesInScale = sort(notesInScale);
     }
 
     public Note[] getNotesInScale()
